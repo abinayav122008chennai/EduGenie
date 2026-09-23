@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGenie - AI Learning Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to EduGenie 🤖</h1>
+        <p>Your personal AI tutor for learning support!</p>
+        
+        <form id="edugenie-form">
+            <label>Select Task:</label>
+            <select name="task" id="task">
+                <option value="explain">Explain Concept</option>
+                <option value="qna">QnA</option>
+                <option value="quiz">Quiz Generation</option>
+                <option value="summary">Summary</option>
+                <option value="recommend">Recommend Path</option>
+            </select>
+
+            <label>Enter your topic/question:</label>
+            <textarea name="user_input" id="user_input" rows="5" placeholder="e.g., Explain Photosynthesis..."></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="result" class="result-container">
+            <h3>Result will appear here...</h3>
+        </div>
+    </div>
+</body>
+</html>
