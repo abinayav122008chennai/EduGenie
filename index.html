@@ -8,9 +8,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to EduGenie 🤖</h1>
+        <h1>Welcome to EduGenie 🎓</h1>
         <p>Your personal AI tutor for learning support!</p>
-        
+
         <form id="edugenie-form">
             <label>Select Task:</label>
             <select name="task" id="task">
@@ -31,5 +31,29 @@
             <h3>Result will appear here...</h3>
         </div>
     </div>
+
+    <script>
+        const form = document.getElementById('edugenie-form');
+        const input = document.getElementById('user_input');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = input.value;
+            resultDiv.innerHTML = '<h3>Loading...</h3>';
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: question })
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = `<h3>${data.answer}</h3>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<h3>EduGenie explains ${question} in 3 simple steps! (Demo Mode)</h3>`;
+            }
+        });
+    </script>
 </body>
 </html>
