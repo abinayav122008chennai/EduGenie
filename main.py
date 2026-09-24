@@ -1,45 +1,33 @@
-from fastapi import FastAPI, Query, Request
-import google.generativeai as genai
+from fastapi import FastAPI
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="EduGenie")
-genai.configure(api_key="YOUR_GEMINI_API_KEY")
-model = genai.GenerativeModel("gemini-1.5-flash")
 
-async def answer_with_gemini(prompt: str):
-    response = model.generate_content(prompt)
-    return response.text
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class AskRequest(BaseModel):
+    question: str
 
 @app.get("/")
 def home():
-    return {"message": "EduGenie Running Successfully!"}
+    return {"message": "EduGenie Running Successfully"}
 
-@app.get("/qa")
-async def qa(question: str = Query(...)):
-    ans = await answer_with_gemini(question)
-    return {"answer": ans}
+@app.post("/ask")
+def ask(req: AskRequest):
+    return {
+        "question": req.question,
+        "answer": f"EduGenie explains {req.question} in 3 simple steps!"
+    }
 
-@app.post("/explain/")
-async def explain_api(request: Request):
-    data = await request.json()
-    topic = data.get("topic")
-    ans = await answer_with_gemini(f"Explain {topic} in simple terms")
-    return {"explanation": ans}
-
-@app.post("/quiz/")
-async def quiz_api(request: Request):
-    data = await request.json()
-    topic = data.get("topic")
-    ans = await answer_with_gemini(f"Create 5 MCQs for {topic} with answers")
-    return {"quiz": ans}
-
-@app.post("/summarize/")
-async def summarize_api(request: Request):
-    data = await request.json()
-    text = data.get("text")
-    ans = await answer_with_gemini(f"Summarize this: {text}")
-    return {"summary": ans}
-
-@app.get("/learn/recommendations")
-async def recommend_api(topic: str = Query(...)):
-    ans = await answer_with_gemini(f"Give learning roadmap for {topic}")
-    return {"recommendations": ans}
+@app.get("/roadmap")
+def roadmap(skill: str):
+    return {
+        "skill": skill,
+        "steps": ["Basics", "Intermediate", "Advanced"]
+    }
